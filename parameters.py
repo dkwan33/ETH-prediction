@@ -7,6 +7,7 @@ from tensorflow.keras.layers import LSTM
 N_STEPS = 50
 # Lookup step, 1 is the next day. 3 is the next 3 days. etc... 
 # essentially how far into the future you want to predict.
+# lookup step needs to be a dividend of step size? nope. 15 and 50 works fine.
 LOOKUP_STEP = 1
 
 # whether to scale feature columns & output price as well. Will scale from 0 to 1.
@@ -34,7 +35,7 @@ FEATURE_COLUMNS = ["adjclose", "volume", "open", "high", "low"]
 # the date. used for pulling data with yahoo finance
 # ie: 2021-04-01
 # date_now = time.strftime("%Y-%m-%d") #current date
-date_now = "2021-04-01" #setting it to april 1st to keep things consistent.
+date_now = "2021-04-02" #setting it to a hard date to keep things consistent.
 
 ### model parameters that will be used in create_model
 
@@ -44,19 +45,19 @@ N_LAYERS = 2
 CELL = LSTM
 # UNITS is the number of RNN/LSTM cell units.
 # 256 = 256 LSTM neurons
-UNITS = 256
+UNITS = 128
 # the dropout rate after each RNN/LSTM layer. 0.4 would be 40% dropout.
 # dropout rate is the probability of not training a given node in a layer. where 0.0 is no dropout at all. 
 # dropout rate helps prevent overfitting.
-DROPOUT = 0.4
+DROPOUT = 0.2
 # whether to use bidirectional RNNs
-BIDIRECTIONAL = False
+BIDIRECTIONAL = True
 
 ### training parameters
 
 # LOSS is the type of Loss function to use for the regression. choices are huber loss, mean absolute error, or mean squared error.
 # valid LOSS parameters are: "huber_loss", "mae", "mse"
-LOSS = "huber_loss"
+LOSS = "mae"
 
 # OPTIMIZER is the optiimziation algorithm to use. Default is "adam".
 OPTIMIZER = "adam"
@@ -65,8 +66,9 @@ OPTIMIZER = "adam"
 BATCH_SIZE = 64
 
 # Epochs is the number of times that the learning algorithm will pass through the ENTIRE training dataset. More is better.
-EPOCHS = 5
+EPOCHS = 300
 
+# ticker to pull from yahoo finance
 ticker = "ETH-USD"
 ticker_data_filename = os.path.join("data", f"{ticker}_{date_now}.csv")
 # model name to save, making it as unique as possible based on parameters

@@ -41,6 +41,12 @@ def get_final_df(model, data):
         y_test = np.squeeze(data["column_scaler"]["adjclose"].inverse_transform(np.expand_dims(y_test, axis=0)))
         y_pred = np.squeeze(data["column_scaler"]["adjclose"].inverse_transform(y_pred))
     test_df = data["test_df"]
+
+    file = open("test_output.txt", "w")
+    str_y_pred = repr(y_pred)
+    file.write(str_y_pred)
+    file.close()
+
     # add predicted future prices to the dataframe
     test_df[f"adjclose_{LOOKUP_STEP}"] = y_pred
     # add true future prices to the dataframe
@@ -70,13 +76,17 @@ def predict(model, data):
     last_sequence = data["last_sequence"][-N_STEPS:]
     # expand dimension
     last_sequence = np.expand_dims(last_sequence, axis=0)
+    print("last_sequence:", last_sequence) 
     # get the prediction (scaled from 0 to 1)
     prediction = model.predict(last_sequence)
+    print("prediction:", prediction) 
     # get the price (by inverting the scaling)
     if SCALE:
         predicted_price = data["column_scaler"]["adjclose"].inverse_transform(prediction)[0][0]
+        print("predicted_price scale:", predicted_price)
     else:
         predicted_price = prediction[0][0]
+        print("predicted_price notscale:", predicted_price)
     return predicted_price
 
 
@@ -140,19 +150,19 @@ print("Total sell profit:", total_sell_profit)
 print("Total profit:", total_profit)
 print("Profit per trade:", profit_per_trade)
 
-# plot true/pred prices graph
-plot_graph(final_df)
-
 #print the last 10 rows of the dataframe to console
 print(final_df.tail(10))
+
+# plot true/pred prices graph
+plot_graph(final_df)
 
 # save the final dataframe to csv-results folder
 # the dataframe columns are as follows:
 # open, high, low, close, adjclose, and volume are the same as the testing set features
 # adjclose is the predicted adjclose price after x days
 # true_adjclose is the true price after x days. 
-# buy_profit is the profit you would get if you hypothetically bought at that date. negative numbers would be a loss. (we predicted incorrectly and should have sold)
-# sell_profit is the profit you would get if you hypothetically sold at that date. 
+# buy_profit is the profit you would get if you hypothetically bought at that date (based on your prediction). negative numbers would be a loss. (we predicted incorrectly and should have sold)
+# sell_profit is the profit you would get if you hypothetically sold at that date (based on your prediction). 
 csv_results_folder = "csv-results"
 if not os.path.isdir(csv_results_folder):
     os.mkdir(csv_results_folder)

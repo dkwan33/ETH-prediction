@@ -1,3 +1,8 @@
-To run this:
+To run:
 - `pip3 install -r requirements.txt`
-- Once you trained your model, use `test.py` to evaluate and test your model.
+- run train.py
+- run test.py
+
+This was built following a tutorial:
+https://www.thepythoncode.com/article/stock-price-prediction-in-python-using-tensorflow-2-and-keras
+

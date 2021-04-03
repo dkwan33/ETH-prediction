@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, Dropout, Bidirectional
+from tensorflow.keras.layers import LSTM, SimpleRNN, SimpleRNNCell, GRU, Dense, Dropout, Bidirectional
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from yahoo_fin import stock_info as si
