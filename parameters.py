@@ -8,7 +8,7 @@ N_STEPS = 50
 # Lookup step, 1 is the next day. 3 is the next 3 days. etc... 
 # essentially how far into the future you want to predict.
 # lookup step needs to be a dividend of step size? nope. 15 and 50 works fine.
-LOOKUP_STEP = 1
+LOOKUP_STEP = 30
 
 # whether to scale feature columns & output price as well. Will scale from 0 to 1.
 SCALE = True
@@ -66,7 +66,7 @@ OPTIMIZER = "adam"
 BATCH_SIZE = 64
 
 # Epochs is the number of times that the learning algorithm will pass through the ENTIRE training dataset. More is better.
-EPOCHS = 300
+EPOCHS = 100
 
 # ticker to pull from yahoo finance
 ticker = "ETH-USD"
